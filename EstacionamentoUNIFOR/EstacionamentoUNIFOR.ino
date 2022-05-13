@@ -7,6 +7,7 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+char topico[50];
 
 const char* ssid = "XuxaPark";
 const char* password = "aquelala";
@@ -17,8 +18,6 @@ int sensorVaga1 = 19;
 int sensorVaga2 = 18;
 int sensorVaga3 = 21;
 int LED_BUILTIN = 2;
-
-
 
 void setup_wifi(){
     delay(10);
@@ -36,7 +35,7 @@ void setup() {
 
   setup_wifi();
   client.setServer(mqtt_server, 1883);
-  client.subscribe("TopicoEstacionamentoUNIFOR");
+  //client.subscribe("Unifor/Estacionamento/Vaga/");
   
   pinMode(sensorVaga1,INPUT);
   pinMode(sensorVaga2,INPUT);
@@ -53,7 +52,7 @@ void reconnect() {
     if (client.connect("ESP32HelderVictor")) {
       Serial.println("connected");
       // Subscribe
-      client.subscribe("TopicoEstacionamentoUNIFOR");
+      //client.subscribe("Topico/Estacionamento/UNIFOR/"+i);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -65,46 +64,25 @@ void reconnect() {
 }
 
 void loop() {
-
    if(!client.connected()){
      reconnect();
    }
    client.loop();
-  
-  
+
   if(!digitalRead(sensorVaga1)){
+    
     //ocupado
     //enviar pro broker uma string (sensorVaga + 1 ou 0) 
-    sprintf(msg, "Teste valor: %d", sensorVaga1);
-    client.publish("TopicoEstacionamentoUNIFOR", msg);
-    digitalWrite(LED_BUILTIN,HIGH);
-  }else{
-    //desocupado
-    sprintf(msg, "Teste valor: %d", sensorVaga1);
-    client.publish("TopicoEstacionamentoUNIFOR", msg);
-    digitalWrite(LED_BUILTIN,LOW);
-  }
+    
+      //JOEL//
+    //sprintf(msg, "Teste valor: %d", sensorVaga1);
+    //client.publish("TopicoEstacionamentoUNIFOR", msg);
+      //JOEL//
 
- /* if(!digitalRead(sensorVaga2)){
-    //ocupado
-    //enviar pro broker uma string (sensorVaga + 1 ou 0) 
-    client.publish("TopicoEstacionamentoUNIFOR", sensorVaga2 + "1");
+    char tempString[8];
+    sprintf(tempString, "%d", 42);
+    client.publish("Unifor/Estacionamento/Vaga/1", tempString);
     digitalWrite(LED_BUILTIN,HIGH);
-  }else{
-    //desocupado
-    client.publish("TopicoEstacionamentoUNIFOR", sensorVaga2 + "0");
-    digitalWrite(LED_BUILTIN,LOW);
   }
-
-  if(!digitalRead(sensorVaga3)){
-    //ocupado
-    //enviar pro broker uma string (sensorVaga + 1 ou 0) 
-    client.publish("TopicoEstacionamentoUNIFOR", sensorVaga3 + "1");
-    digitalWrite(LED_BUILTIN,HIGH);
-  }else{
-    //desocupado
-    client.publish("TopicoEstacionamentoUNIFOR", sensorVaga3 + "0");
-    digitalWrite(LED_BUILTIN,LOW);
-  }*/
   
 }
