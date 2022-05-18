@@ -9,8 +9,8 @@ char msg[50];
 int value = 0;
 char topico[50];
 
-const char* ssid = "XuxaPark";
-const char* password = "aquelala";
+const char* ssid = "silver";
+const char* password = "victorkauan";
 const char* mqtt_server = "broker.hivemq.com"; 
 const int port = 1883;
 
@@ -69,6 +69,7 @@ void loop() {
    }
    client.loop();
 
+/*
   if(!digitalRead(sensorVaga1)){
     
     //ocupado
@@ -79,10 +80,43 @@ void loop() {
     //client.publish("TopicoEstacionamentoUNIFOR", msg);
       //JOEL//
 
-    char tempString[8];
-    sprintf(tempString, "%d", 42);
-    client.publish("Unifor/Estacionamento/Vaga/1", tempString);
+    char caractere1[1];
+    sprintf(caractere1, "1");
+
+    client.publish("Unifor/Estacionamento/Vaga/1", caractere1);
     digitalWrite(LED_BUILTIN,HIGH);
   }
-  
+*/
+    
+    if (!digitalRead(sensorVaga1)) {
+        char mensagemVagaOcupada[1];
+        sprintf(mensagemVagaOcupada, "1");
+        client.publish("Unifor/Estacionamento/Vaga/1", mensagemVagaOcupada);
+    } else {
+        char mensagemVagaLivre[1];
+        sprintf(mensagemVagaLivre, "0");
+        client.publish("Unifor/Estacionamento/Vaga/1", mensagemVagaLivre);
+    }
+
+    if (!digitalRead(sensorVaga2)) {
+        char mensagemVagaOcupada[1];
+        sprintf(mensagemVagaOcupada, "1");
+        client.publish("Unifor/Estacionamento/Vaga/2", mensagemVagaOcupada);
+    } else {
+        char mensagemVagaLivre[1];
+        sprintf(mensagemVagaLivre, "0");
+        client.publish("Unifor/Estacionamento/Vaga/2", mensagemVagaLivre);
+    }
+
+    if (!digitalRead(sensorVaga3)) {
+        char mensagemVagaOcupada[1];
+        sprintf(mensagemVagaOcupada, "1");
+        client.publish("Unifor/Estacionamento/Vaga/3", mensagemVagaOcupada);
+    } else {
+        char mensagemVagaLivre[1];
+        sprintf(mensagemVagaLivre, "0");
+        client.publish("Unifor/Estacionamento/Vaga/3", mensagemVagaLivre);
+    }
+
+    delay(5000);
 }
